@@ -8,9 +8,7 @@ namespace MineSweeper3D.Classic
     [AddComponentMenu("MineSweeper3D/Classic/CellRenderer")]
     public class CellRenderer : MonoBehaviour
     {
-        private Cell _linkedCell = null;
-
-        private Levelrenderer levelRenderer;
+        [Header("INPUT TEXTURES\n")]
 
         [SerializeField]
         private Sprite _coverCellSprite;
@@ -19,14 +17,27 @@ namespace MineSweeper3D.Classic
         private Sprite _coverCellFlagSprite;
 
         [SerializeField]
-        private Sprite _cellSprite;
-
-        [SerializeField]
         private Sprite _cellBombSprite;
 
         [SerializeField]
         private SpriteRenderer _cellTile;
 
+        [SerializeField]
+        private Sprite[] _numberTileList;
+
+        [Header("DEBUG\n")]
+
+        [SerializeField]
+        private bool _hasBombDebug = false;
+
+        [SerializeField]
+        private int _nearBombNumberDebug = 0;
+
+        private Cell _linkedCell = null;
+
+        private Levelrenderer _levelRenderer;
+
+        #region Public API
 
         public Cell LinkedCell
         {
@@ -34,12 +45,29 @@ namespace MineSweeper3D.Classic
             set { _linkedCell = value; }
         }
 
+        #endregion
+
         private void Start()
         {
-            levelRenderer = FindObjectOfType<Levelrenderer>();
+            _levelRenderer = FindObjectOfType<Levelrenderer>();
+            GraphicUpdate();
+
+            _hasBombDebug = _linkedCell.IsBomb;
+            _nearBombNumberDebug = _linkedCell.NearBombsNumber;
         }
 
-        private void Update()
+        private void OnMouseOver()
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (_levelRenderer.Level.FlagSwitch(_linkedCell))
+                    GraphicUpdate();
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                if (_levelRenderer.Level.DiscoverCell(_linkedCell))
+                    _levelRenderer.GraphicsUpdate();
+        }
+
+        public void GraphicUpdate()
         {
             if (_linkedCell.IsCovered)
             {
@@ -50,37 +78,15 @@ namespace MineSweeper3D.Classic
             }
             else
             {
-                if(_linkedCell.IsBomb)
-                    _cellTile.sprite = _cellBombSprite;
-                else
-                    _cellTile.sprite = _cellSprite;
-            }
-        }
-
-        private void OnMouseOver()
-        {
-            if(Input.GetKeyDown(KeyCode.Mouse1))
-            {
-                if (_linkedCell.IsCovered)
-                    _linkedCell.HasFlag = !_linkedCell.HasFlag;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                if (!_linkedCell.HasFlag)
+                if (_linkedCell.IsBomb)
                 {
-                    _linkedCell.IsCovered = false;
-
-                    if (levelRenderer.BombNumber < levelRenderer.CoveredCellsNumber)
-                        levelRenderer.CoveredCellsNumber--;
-                    
-                    if (levelRenderer.BombNumber == levelRenderer.CoveredCellsNumber)
-                        Debug.Log("Win !");
-
-                    if (_linkedCell.IsBomb)
-                        Debug.Log("YOU LOSE, WHY IS AGA SOFIA THIS, AND NOT BEEEUUU !");
+                    _cellTile.sprite = _cellBombSprite;
+                }
+                else
+                {
+                    _cellTile.sprite = _numberTileList[_linkedCell.NearBombsNumber];
                 }
             }
         }
-    } 
+    }
 }

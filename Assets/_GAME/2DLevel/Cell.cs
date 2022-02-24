@@ -37,6 +37,14 @@ namespace MineSweeper3D.Classic
             set { _hasFlag = value; }
         }
 
+        public int NearBombsNumber
+        {
+            get { return _nearBombsNumber; }
+            set { _nearBombsNumber = value; }
+        }
+
+        public Coords2D Position => _position;
+
         #endregion
 
         public Cell(int x, int y, bool isCovered, bool isBomb, bool hasFlag, int nearBombsNumber)

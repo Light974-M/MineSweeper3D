@@ -177,7 +177,7 @@ Camera:
   far clip plane: 100000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622727686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: -100}
+  m_LocalPosition: {x: 5, y: 5, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -299,13 +299,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be4ca858506e410499bf2b09d396ef11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 3
-  _height: 3
+  _width: 10
+  _height: 10
   _cellObjectPrefab: {fileID: 6127504030939896660, guid: fd838fd58539de542bc8cdc082480df6, type: 3}
   _gameCamera: {fileID: 1622727688}
   _cellsParentObject: {fileID: 1861033352}
-  _bombNumber: 0
-  _coveredCellsNumber: 0
+  _bombNumber: 4
 --- !u!4 &1919983411
 Transform:
   m_ObjectHideFlags: 0

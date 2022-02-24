@@ -29,25 +29,18 @@ namespace MineSweeper3D.Classic
 
         [SerializeField]
         private int _bombNumber = 2;
-
-        [SerializeField]
-        private int _coveredCellsNumber;
+        
 
         private Level _level = null;
 
-        public int BombNumber => _bombNumber;
-
-        public int CoveredCellsNumber
-        {
-            get { return _coveredCellsNumber; }
-            set { _coveredCellsNumber = value; }
-        }
+        private float _timer = 0;
 
 
         #endregion
 
         #region public API
 
+        //make a get of Level, and make at the same time sure that _level is not null, if it is, it will make a new level
         public Level Level
         {
             get
@@ -64,11 +57,17 @@ namespace MineSweeper3D.Classic
         private void Awake()
         {
             LevelBuild();
+
+            //delete when true proba system finished
+            _bombNumber = Level.BombNumber;
         }
 
         private void Update()
         {
-            LevelUpdate();
+            if (!_level.IsGameOver)
+            {
+                _timer += Time.deltaTime;
+            }
         }
 
         private void OnDrawGizmos()
@@ -95,7 +94,7 @@ namespace MineSweeper3D.Classic
                 _height = Mathf.Clamp(_height, 1, _intInfinity);
 
                 _gameCamera.transform.position = new Vector3((Level.Width / 2) * transform.localScale.x, (Level.Height / 2) * transform.localScale.y,  -100) + transform.position;
-                _gameCamera.orthographicSize = (Level.Width + Level.Height) / 2;
+                _gameCamera.orthographicSize = (Level.Width + Level.Height) / 2.5f;
 
                 for (int y = 0; y < Level.Height; y++)
                 {
@@ -128,20 +127,17 @@ namespace MineSweeper3D.Classic
 
                     if (Level.CellsArray[x, y].IsBomb)
                         _bombNumber++;
-
-                    _coveredCellsNumber++;
                 }
             }
         }
 
-        private void LevelUpdate()
+        public void GraphicsUpdate()
         {
-            for (int y = 0; y < Level.Height; y++)
+            CellRenderer[] cellRendererArray = FindObjectsOfType<CellRenderer>();
+
+            foreach (CellRenderer cellRenderer in cellRendererArray)
             {
-                for (int x = 0; x < Level.Width; x++)
-                {
-                    
-                }
+                cellRenderer.GraphicUpdate();
             }
         }
     } 
