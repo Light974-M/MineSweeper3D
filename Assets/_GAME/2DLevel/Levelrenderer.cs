@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MineSweeper3D.Classic
 {
@@ -6,30 +7,34 @@ namespace MineSweeper3D.Classic
     /// renderer of minesweeper2D levelMap for unityEngine
     ///</summary>
     [AddComponentMenu("MineSweeper3D/Classic/Level")]
-    public class Levelrenderer : MonoBehaviour
+    public class LevelRenderer : MonoBehaviour
     {
         #region variables
 
         private const int _intInfinity = 2147483647;
 
-        [SerializeField, Tooltip("")]
-        private int _width = 4;
 
+        [Header("USER PARAMETERS")]
         [SerializeField, Tooltip("")]
-        private int _height = 4;
+        private LevelParameters _levelParameters;
 
+
+        [Header("LEVEL PARAMETERS")]
         [SerializeField]
         private GameObject _cellObjectPrefab;
-
-        [SerializeField, Tooltip("")]
-        private Camera _gameCamera;
 
         [SerializeField]
         private GameObject _cellsParentObject;
 
+
+        [Header("TOOLS PARAMETERS")]
+        [SerializeField, Tooltip("")]
+        private Camera _gameCamera;
+
+
+        [Header("DEBUG")]
         [SerializeField]
-        private int _bombNumber = 2;
-        
+        private int _cellCoveredNumberDebug = 0;
 
         private Level _level = null;
 
@@ -46,28 +51,38 @@ namespace MineSweeper3D.Classic
             get
             {
                 if (_level == null)
-                    _level = new Level(_width, _height, _bombNumber);
+                    _level = new Level(_levelParameters.Width, _levelParameters.Height, _levelParameters.BombNumber);
 
                 return _level;
             }
+        }
+
+        public float Timer
+        {
+            get { return _timer; }
+            set { _timer = value; }
         }
 
         #endregion
 
         private void Awake()
         {
-            LevelBuild();
+            _gameCamera = FindObjectOfType<Camera>();
 
-            //delete when true proba system finished
-            _bombNumber = Level.BombNumber;
+            _gameCamera.transform.position = new Vector3((Level.Width / 2f - 0.5f) * transform.localScale.x, (Level.Height / 2f - 0.5f) * transform.localScale.y, -100) + transform.position;
+            _gameCamera.orthographicSize = (Level.Width + Level.Height) / 4f;
+
+            LevelBuild();
         }
 
         private void Update()
         {
-            if (!_level.IsGameOver)
-            {
-                _timer += Time.deltaTime;
-            }
+            if (!Level.IsPaused && !Level.IsGameOver && (Level.CoveredCellsNumber != (Level.Width * Level.Height)))
+                TimerUpdate();
+
+
+
+            PauseInputManager();
         }
 
         private void OnDrawGizmos()
@@ -87,14 +102,14 @@ namespace MineSweeper3D.Classic
                     else
                     {
                         _cellsParentObject = transform.Find("Cells").gameObject;
-                    } 
+                    }
                 }
 
-                _width = Mathf.Clamp(_width, 1, _intInfinity);
-                _height = Mathf.Clamp(_height, 1, _intInfinity);
+                _levelParameters.Width = Mathf.Clamp(_levelParameters.Width, 1, _intInfinity);
+                _levelParameters.Height = Mathf.Clamp(_levelParameters.Height, 1, _intInfinity);
 
-                _gameCamera.transform.position = new Vector3((Level.Width / 2) * transform.localScale.x, (Level.Height / 2) * transform.localScale.y,  -100) + transform.position;
-                _gameCamera.orthographicSize = (Level.Width + Level.Height) / 2.5f;
+                _gameCamera.transform.position = new Vector3((Level.Width / 2f - 0.5f) * transform.localScale.x, (Level.Height / 2f - 0.5f) * transform.localScale.y, -100) + transform.position;
+                _gameCamera.orthographicSize = (Level.Width + Level.Height) / 4f;
 
                 for (int y = 0; y < Level.Height; y++)
                 {
@@ -104,16 +119,16 @@ namespace MineSweeper3D.Classic
                     }
                 }
 
-                if ((_width != Level.Width || _height != Level.Height))
+                if ((_levelParameters.Width != Level.Width || _levelParameters.Height != Level.Height))
                 {
-                    _level = null; 
+                    _level = null;
                 }
             }
         }
 
         private void LevelBuild()
         {
-            _level = new Level(_width, _height, _bombNumber);
+            _level = new Level(_levelParameters.Width, _levelParameters.Height, _levelParameters.BombNumber);
 
             for (int y = 0; y < Level.Height; y++)
             {
@@ -126,7 +141,7 @@ namespace MineSweeper3D.Classic
                     cellScript.LinkedCell = Level.CellsArray[x, y];
 
                     if (Level.CellsArray[x, y].IsBomb)
-                        _bombNumber++;
+                        _levelParameters.BombNumber++;
                 }
             }
         }
@@ -139,6 +154,20 @@ namespace MineSweeper3D.Classic
             {
                 cellRenderer.GraphicUpdate();
             }
+
+            _levelParameters.BombNumber = Level.BombNumber;
+            _cellCoveredNumberDebug = Level.CoveredCellsNumber;
         }
-    } 
+
+        private void TimerUpdate()
+        {
+            _timer += Time.deltaTime;
+        }
+
+        private void PauseInputManager()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                _level.PauseSwitch();
+        }
+    }
 }

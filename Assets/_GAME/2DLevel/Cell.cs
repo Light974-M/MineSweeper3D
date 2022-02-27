@@ -7,6 +7,8 @@ namespace MineSweeper3D.Classic
     ///</summary>
     public class Cell
     {
+        #region Variables
+
         private Coords2D _position;
 
         private bool _isCovered;
@@ -15,7 +17,9 @@ namespace MineSweeper3D.Classic
 
         private bool _hasFlag;
 
-        private int _nearBombsNumber;
+        private int _nearBombsNumber; 
+
+        #endregion
 
         #region public API
 

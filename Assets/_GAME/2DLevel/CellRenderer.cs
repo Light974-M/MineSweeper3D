@@ -35,7 +35,7 @@ namespace MineSweeper3D.Classic
 
         private Cell _linkedCell = null;
 
-        private Levelrenderer _levelRenderer;
+        private LevelRenderer _levelRenderer;
 
         #region Public API
 
@@ -49,8 +49,7 @@ namespace MineSweeper3D.Classic
 
         private void Start()
         {
-            _levelRenderer = FindObjectOfType<Levelrenderer>();
-            GraphicUpdate();
+            _levelRenderer = FindObjectOfType<LevelRenderer>();
 
             _hasBombDebug = _linkedCell.IsBomb;
             _nearBombNumberDebug = _linkedCell.NearBombsNumber;
@@ -79,14 +78,13 @@ namespace MineSweeper3D.Classic
             else
             {
                 if (_linkedCell.IsBomb)
-                {
                     _cellTile.sprite = _cellBombSprite;
-                }
                 else
-                {
                     _cellTile.sprite = _numberTileList[_linkedCell.NearBombsNumber];
-                }
             }
+
+            _hasBombDebug = _linkedCell.IsBomb;
+            _nearBombNumberDebug = _linkedCell.NearBombsNumber;
         }
     }
 }
