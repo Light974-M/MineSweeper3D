@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MineSweeper3D.Classic2D
+namespace MineSweeper3D.Classic3D
 {
     ///<summary>
     /// renderer for every game cells, making textures, and collision detections
@@ -20,7 +20,10 @@ namespace MineSweeper3D.Classic2D
         private Sprite _cellBombSprite;
 
         [SerializeField]
-        private SpriteRenderer _cellTile;
+        private Collider _tileCollider;
+
+        [SerializeField]
+        private SpriteRenderer[] _cellTileArray;
 
         [SerializeField]
         private Sprite[] _numberTileList;
@@ -71,20 +74,29 @@ namespace MineSweeper3D.Classic2D
             if (_linkedCell.IsCovered)
             {
                 if (_linkedCell.HasFlag)
-                    _cellTile.sprite = _coverCellFlagSprite;
+                    AssignTexture(_coverCellFlagSprite);
                 else
-                    _cellTile.sprite = _coverCellSprite;
+                    AssignTexture(_coverCellSprite);
             }
             else
             {
+                _tileCollider.enabled = false;
+
                 if (_linkedCell.IsBomb)
-                    _cellTile.sprite = _cellBombSprite;
+                    AssignTexture(_cellBombSprite);
                 else
-                    _cellTile.sprite = _numberTileList[_linkedCell.NearBombsNumber];
+                    AssignTexture(_numberTileList[_linkedCell.NearBombsNumber]);
             }
 
             _hasBombDebug = _linkedCell.IsBomb;
             _nearBombNumberDebug = _linkedCell.NearBombsNumber;
+        }
+
+        private void AssignTexture(Sprite toAssign)
+        {
+            foreach (SpriteRenderer _cellTile in _cellTileArray)
+                _cellTile.sprite = toAssign;
+
         }
     }
 }

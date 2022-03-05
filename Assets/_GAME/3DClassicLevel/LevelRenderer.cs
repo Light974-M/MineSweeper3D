@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MineSweeper3D.Classic2D
+namespace MineSweeper3D.Classic3D
 {
     ///<summary>
     /// renderer of minesweeper2D levelMap for unityEngine
@@ -29,7 +29,7 @@ namespace MineSweeper3D.Classic2D
 
         [Header("TOOLS PARAMETERS")]
         [SerializeField, Tooltip("")]
-        private Camera _gameCamera;
+        private Transform _gameCamera;
 
 
         [Header("DEBUG")]
@@ -51,7 +51,7 @@ namespace MineSweeper3D.Classic2D
             get
             {
                 if (_level == null)
-                    _level = new Level(_levelParameters.Width, _levelParameters.Height, _levelParameters.BombNumber);
+                    _level = new Level(_levelParameters.Width, _levelParameters.Height, _levelParameters.Length, _levelParameters.BombNumber);
 
                 return _level;
             }
@@ -67,17 +67,14 @@ namespace MineSweeper3D.Classic2D
 
         private void Awake()
         {
-            _gameCamera = FindObjectOfType<Camera>();
-
-            _gameCamera.transform.position = new Vector3((Level.Width / 2f - 0.5f) * transform.localScale.x, (Level.Height / 2f - 0.5f) * transform.localScale.y, -100) + transform.position;
-            _gameCamera.orthographicSize = (Level.Width + Level.Height) / 4f;
+            _gameCamera.position = new Vector3((Level.Width / 2f - 0.5f) * transform.localScale.x, (Level.Height / 2f - 0.5f) * transform.localScale.y, (Level.Length / 2f - 0.5f) * transform.localScale.z) + transform.position;
 
             LevelBuild();
         }
 
         private void Update()
         {
-            if (!Level.IsPaused && !Level.IsGameOver && (Level.CoveredCellsNumber != (Level.Width * Level.Height)))
+            if (!Level.IsPaused && !Level.IsGameOver && (Level.CoveredCellsNumber != (Level.Width * Level.Height * Level.Length)))
                 TimerUpdate();
 
 
@@ -89,9 +86,6 @@ namespace MineSweeper3D.Classic2D
         {
             if (!Application.isPlaying)
             {
-                if (_gameCamera == null)
-                    _gameCamera = FindObjectOfType<Camera>();
-
                 if (_cellsParentObject == null)
                 {
                     if (transform.Find("Cells") == null)
@@ -107,19 +101,22 @@ namespace MineSweeper3D.Classic2D
 
                 _levelParameters.Width = Mathf.Clamp(_levelParameters.Width, 1, _intInfinity);
                 _levelParameters.Height = Mathf.Clamp(_levelParameters.Height, 1, _intInfinity);
+                _levelParameters.Length = Mathf.Clamp(_levelParameters.Length, 1, _intInfinity);
 
-                _gameCamera.transform.position = new Vector3((Level.Width / 2f - 0.5f) * transform.localScale.x, (Level.Height / 2f - 0.5f) * transform.localScale.y, -100) + transform.position;
-                _gameCamera.orthographicSize = (Level.Width + Level.Height) / 4f;
+                _gameCamera.position = new Vector3((Level.Width / 2f - 0.5f) * transform.localScale.x, (Level.Height / 2f - 0.5f) * transform.localScale.y, (Level.Length / 2f - 0.5f) * transform.localScale.z) + transform.position;
 
-                for (int y = 0; y < Level.Height; y++)
+                for (int z = 0; z < Level.Length; z++)
                 {
-                    for (int x = 0; x < Level.Width; x++)
+                    for (int y = 0; y < Level.Height; y++)
                     {
-                        Gizmos.DrawWireCube((new Vector3(x * transform.localScale.x, y * transform.localScale.y) + transform.position), Vector2.one * transform.localScale);
-                    }
+                        for (int x = 0; x < Level.Width; x++)
+                        {
+                            Gizmos.DrawWireCube((new Vector3(x * transform.localScale.x, y * transform.localScale.y, z * transform.localScale.z) + transform.position), new Vector3(1 * transform.localScale.x, 1 * transform.localScale.y, 1 * transform.localScale.z));
+                        }
+                    } 
                 }
 
-                if ((_levelParameters.Width != Level.Width || _levelParameters.Height != Level.Height))
+                if (_levelParameters.Width != Level.Width || _levelParameters.Height != Level.Height || _levelParameters.Length != Level.Length)
                 {
                     _level = null;
                 }
@@ -128,21 +125,24 @@ namespace MineSweeper3D.Classic2D
 
         private void LevelBuild()
         {
-            _level = new Level(_levelParameters.Width, _levelParameters.Height, _levelParameters.BombNumber);
+            _level = new Level(_levelParameters.Width, _levelParameters.Height, _levelParameters.Length, _levelParameters.BombNumber);
 
-            for (int y = 0; y < Level.Height; y++)
+            for (int z = 0; z < Level.Length; z++)
             {
-                for (int x = 0; x < Level.Width; x++)
+                for (int y = 0; y < Level.Height; y++)
                 {
-                    GameObject cellPrefab = Instantiate(_cellObjectPrefab, new Vector3(x * transform.localScale.x, y * transform.localScale.y) + transform.position, Quaternion.identity);
-                    CellRenderer cellScript = cellPrefab.GetComponent<CellRenderer>();
+                    for (int x = 0; x < Level.Width; x++)
+                    {
+                        GameObject cellPrefab = Instantiate(_cellObjectPrefab, new Vector3(x * transform.localScale.x, y * transform.localScale.y, z * transform.localScale.z) + transform.position, Quaternion.identity);
+                        CellRenderer cellScript = cellPrefab.GetComponent<CellRenderer>();
 
-                    cellPrefab.transform.SetParent(_cellsParentObject.transform);
-                    cellScript.LinkedCell = Level.CellsArray[x, y];
+                        cellPrefab.transform.SetParent(_cellsParentObject.transform);
+                        cellScript.LinkedCell = Level.CellsArray[x, y, z];
 
-                    if (Level.CellsArray[x, y].IsBomb)
-                        _levelParameters.BombNumber++;
-                }
+                        if (Level.CellsArray[x, y, z].IsBomb)
+                            _levelParameters.BombNumber++;
+                    }
+                } 
             }
         }
 

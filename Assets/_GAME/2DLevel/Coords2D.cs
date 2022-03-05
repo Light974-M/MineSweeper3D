@@ -1,4 +1,4 @@
-namespace MineSweeper3D.Classic
+namespace MineSweeper3D.Classic2D
 {
     ///<summary>
     /// coordinate system for Cells map of mineSweeper2D

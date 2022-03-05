@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MineSweeper3D.Classic2D
+namespace MineSweeper3D.Classic3D
 {
     ///<summary>
     /// represent cells grid for minesweeper 2D
@@ -9,7 +9,7 @@ namespace MineSweeper3D.Classic2D
     {
         #region Variables
 
-        private Coords2D _position;
+        private Coords3D _position;
 
         private bool _isCovered;
 
@@ -47,13 +47,13 @@ namespace MineSweeper3D.Classic2D
             set { _nearBombsNumber = value; }
         }
 
-        public Coords2D Position => _position;
+        public Coords3D Position => _position;
 
         #endregion
 
-        public Cell(int x, int y, bool isCovered, bool isBomb, bool hasFlag, int nearBombsNumber)
+        public Cell(int x, int y, int z, bool isCovered, bool isBomb, bool hasFlag, int nearBombsNumber)
         {
-            _position = new Coords2D(x, y);
+            _position = new Coords3D(x, y, z);
             _isCovered = isCovered;
             _isBomb = isBomb;
             _hasFlag = hasFlag;

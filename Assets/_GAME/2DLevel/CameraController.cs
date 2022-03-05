@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MineSweeper3D.Classic
+namespace MineSweeper3D.Classic2D
 {
     ///<summary>
     /// 

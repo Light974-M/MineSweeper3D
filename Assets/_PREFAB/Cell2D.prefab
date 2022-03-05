@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6127504030939896662}
   - component: {fileID: 1070082841093951578}
   m_Layer: 0
-  m_Name: Cell
+  m_Name: Cell2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _coverCellSprite: {fileID: 21300000, guid: eb6a250f822a6e84382a8020854de00e, type: 3}
   _coverCellFlagSprite: {fileID: 21300000, guid: fd326635e02520d44b17c059efe6dccb, type: 3}
-  _cellBombSprite: {fileID: 21300000, guid: 72239e50134959a45b29544526249465, type: 3}
+  _cellBombSprite: {fileID: 21300000, guid: b6f63682dfdaf0d42ae99b0283e4d695, type: 3}
   _cellTile: {fileID: 6127504032647660793}
   _numberTileList:
   - {fileID: 21300000, guid: 3ce6d113763ddde4cb254cf2f9297263, type: 3}

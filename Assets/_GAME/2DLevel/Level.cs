@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MineSweeper3D.Classic
+namespace MineSweeper3D.Classic2D
 {
     ///<summary>
     /// Level GridMap for minesweeper 2D classic, contain all cells of game.

@@ -1,9 +1,8 @@
-using MineSweeper3D.Classic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace MineSweeper3D
+namespace MineSweeper3D.Classic3D
 {
     ///<summary>
     /// 

@@ -9,10 +9,13 @@ namespace MineSweeper3D
     public class LevelParameters : ScriptableObject
     {
         [SerializeField, Tooltip("")]
-        private int _width = 4;
+        private int _width = 3;
 
         [SerializeField, Tooltip("")]
-        private int _height = 4;
+        private int _height = 3;
+
+        [SerializeField, Tooltip("")]
+        private int _length = 3;
 
         [SerializeField, Tooltip("")]
         private int _bombNumber = 2;
@@ -30,6 +33,12 @@ namespace MineSweeper3D
         {
             get { return _height; }
             set { _height = value; }
+        }
+
+        public int Length
+        {
+            get { return _length; }
+            set { _length = value; }
         }
 
         public int BombNumber
