@@ -5,7 +5,7 @@ namespace MineSweeper3D.Classic3D
     ///<summary>
     /// 
     ///</summary>
-    [AddComponentMenu("CameraController")]
+    [AddComponentMenu("MineSweeper3D/Classic3D/CameraController")]
     public class CameraController : MonoBehaviour
     {
         [SerializeField, Tooltip("")]

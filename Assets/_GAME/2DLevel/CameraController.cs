@@ -3,16 +3,17 @@ using UnityEngine;
 namespace MineSweeper3D.Classic2D
 {
     ///<summary>
-    /// 
+    /// control camera movement for 2D game mode
     ///</summary>
-    [AddComponentMenu("CameraController")]
+    [AddComponentMenu("MineSweeper3D/Classic/CameraController")]
     public class CameraController : MonoBehaviour
     {
-        [SerializeField, Tooltip("")]
+        [SerializeField, Tooltip("speed of zoom in and out")]
         private float _scrollSpeed = 0.5f;
 
-        [SerializeField, Tooltip("")]
+        [SerializeField, Tooltip("speed of mouse drag")]
         private float _dragSpeed = 1;
+
 
         private Camera _camera;
 

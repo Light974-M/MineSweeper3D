@@ -7,7 +7,7 @@ namespace MineSweeper3D.Classic2D
     ///<summary>
     /// 
     ///</summary>
-    [AddComponentMenu("UIRenderer")]
+    [AddComponentMenu("MineSweeper3D/Classic/UIRenderer")]
     public class UIRenderer : MonoBehaviour
     {
 

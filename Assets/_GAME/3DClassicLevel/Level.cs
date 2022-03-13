@@ -101,7 +101,7 @@ namespace MineSweeper3D.Classic3D
             {
                 int bombPos = Random.Range(0, (_width * _height * _length) - bombIndex);
                 int bombPosLength = bombPos / (_width * _height);
-                int bombPosHeight = bombPos - ((_height * _width) * bombPosLength) / _width;
+                int bombPosHeight = (bombPos - ((_height * _width) * bombPosLength)) / _width;
                 int bombPoswidth = bombPos - (((_width * _height) * bombPosLength) + (_width * bombPosHeight));
                 bool isOneOfSelectedCell = false;
 
@@ -111,7 +111,8 @@ namespace MineSweeper3D.Classic3D
 
                 isOneOfSelectedCell = verifyBombPosComparedToInput(x, y, z, bombPoswidth, bombPosHeight, bombPosLength);
 
-
+                //Debug for bombPosCalculation
+                //Debug.Log($"i : {bombPos}    xyz : ({bombPoswidth}, {bombPosHeight}, {bombPosLength})");
                 if (!_cellsArray[bombPoswidth, bombPosHeight, bombPosLength].IsBomb && !isOneOfSelectedCell)
                 {
                     _cellsArray[bombPoswidth, bombPosHeight, bombPosLength].IsBomb = true;
@@ -125,14 +126,14 @@ namespace MineSweeper3D.Classic3D
                     {
                         bombPos++;
                         bombPosLength = bombPos / (_width * _height);
-                        bombPosHeight = bombPos - ((_height * _width) * bombPosLength) / _width;
+                        bombPosHeight = (bombPos - ((_height * _width) * bombPosLength)) / _width;
                         bombPoswidth = bombPos - (((_width * _height) * bombPosLength) + (_width * bombPosHeight));
 
                         if (bombPoswidth >= _width || bombPosHeight >= _height || bombPosLength >= _length)
                         {
                             bombPos = 0;
                             bombPosLength = bombPos / (_width * _height);
-                            bombPosHeight = bombPos - ((_height * _width) * bombPosLength) / _width;
+                            bombPosHeight = (bombPos - ((_height * _width) * bombPosLength)) / _width;
                             bombPoswidth = bombPos - (((_width * _height) * bombPosLength) + (_width * bombPosHeight));
                         }
 
@@ -162,14 +163,14 @@ namespace MineSweeper3D.Classic3D
                             {
                                 bombPos++;
                                 bombPosLength = bombPos / (_width * _height);
-                                bombPosHeight = bombPos - ((_height * _width) * bombPosLength) / _width;
+                                bombPosHeight = (bombPos - ((_height * _width) * bombPosLength)) / _width;
                                 bombPoswidth = bombPos - (((_width * _height) * bombPosLength) + (_width * bombPosHeight));
 
                                 if (bombPoswidth >= _width || bombPosHeight >= _height || bombPosLength >= _length)
                                 {
                                     bombPos = 0;
                                     bombPosLength = bombPos / (_width * _height);
-                                    bombPosHeight = bombPos - ((_height * _width) * bombPosLength) / _width;
+                                    bombPosHeight = (bombPos - ((_height * _width) * bombPosLength)) / _width;
                                     bombPoswidth = bombPos - (((_width * _height) * bombPosLength) + (_width * bombPosHeight));
                                 }
 
@@ -256,7 +257,7 @@ namespace MineSweeper3D.Classic3D
                 linkedCell.IsCovered = false;
 
                 if (CoveredCellsNumber == (Width * Height * Length))
-                    //BuildBombs(linkedCell);
+                    BuildBombs(linkedCell);
 
                 //consider bomb cells as always covered, this as no impact on game, useful for debug, where you can continue playing after touching a bomb
                 if (BombNumber < CoveredCellsNumber)

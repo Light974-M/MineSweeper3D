@@ -5,7 +5,7 @@ namespace MineSweeper3D.Classic3D
     ///<summary>
     /// renderer for every game cells, making textures, and collision detections
     ///</summary>
-    [AddComponentMenu("MineSweeper3D/Classic/CellRenderer")]
+    [AddComponentMenu("MineSweeper3D/Classic3D/CellRenderer")]
     public class CellRenderer : MonoBehaviour
     {
         [Header("INPUT TEXTURES\n")]
@@ -24,6 +24,9 @@ namespace MineSweeper3D.Classic3D
 
         [SerializeField]
         private SpriteRenderer[] _cellTileArray;
+
+        [SerializeField]
+        private Sprite _blankCellTile;
 
         [SerializeField]
         private Sprite[] _numberTileList;
@@ -83,20 +86,32 @@ namespace MineSweeper3D.Classic3D
                 _tileCollider.enabled = false;
 
                 if (_linkedCell.IsBomb)
-                    AssignTexture(_cellBombSprite);
+                    AssignTexture(_cellBombSprite, _numberTileList[0]);
                 else
-                    AssignTexture(_numberTileList[_linkedCell.NearBombsNumber]);
+                {
+                    if(_linkedCell.NearBombsNumber == 0)
+                        AssignTexture(_blankCellTile);
+                    else
+                        AssignTexture(_numberTileList[_linkedCell.NearBombsNumber], _numberTileList[0]);
+                }
             }
 
             _hasBombDebug = _linkedCell.IsBomb;
             _nearBombNumberDebug = _linkedCell.NearBombsNumber;
         }
 
+        private void AssignTexture(Sprite toAssign, Sprite blank)
+        {
+            foreach (SpriteRenderer _cellTile in _cellTileArray)
+                _cellTile.sprite = blank;
+
+            _cellTileArray[_cellTileArray.Length - 1].sprite = toAssign;
+        }
+
         private void AssignTexture(Sprite toAssign)
         {
             foreach (SpriteRenderer _cellTile in _cellTileArray)
                 _cellTile.sprite = toAssign;
-
         }
     }
 }

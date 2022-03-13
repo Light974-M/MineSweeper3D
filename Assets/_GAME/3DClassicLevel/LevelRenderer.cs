@@ -6,7 +6,7 @@ namespace MineSweeper3D.Classic3D
     ///<summary>
     /// renderer of minesweeper2D levelMap for unityEngine
     ///</summary>
-    [AddComponentMenu("MineSweeper3D/Classic/Level")]
+    [AddComponentMenu("MineSweeper3D/Classic3D/Level")]
     public class LevelRenderer : MonoBehaviour
     {
         #region variables
@@ -76,8 +76,6 @@ namespace MineSweeper3D.Classic3D
         {
             if (!Level.IsPaused && !Level.IsGameOver && (Level.CoveredCellsNumber != (Level.Width * Level.Height * Level.Length)))
                 TimerUpdate();
-
-
 
             PauseInputManager();
         }

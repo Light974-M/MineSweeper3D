@@ -6,7 +6,7 @@ namespace MineSweeper3D
     ///<summary>
     /// additional script for generic slider process
     ///</summary>
-    [AddComponentMenu("SliderAdditionalScript")]
+    [AddComponentMenu("MineSweeper3D/SliderAdditionalScript")]
     public class SliderAdditionalScript : MonoBehaviour
     {
 
